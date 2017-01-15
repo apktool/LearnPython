@@ -1,6 +1,20 @@
-#文件操作
+#文件操作|内容分隔再存储
 '''
 读取文件->按照‘:’分隔每行元素->将使用'======'分隔的内容存储到不同的文件中
+
+文件内容定义：
+每行使用':'分隔不同内容
+不同的内容块使用'======'分隔
+'''
+
+'''
+record.txt'内容样例如下
+
+Li:How are you?
+Wang:I am fine, think you!
+======
+Li:What happend?
+Wang:Nothing
 '''
 
 def save_file(boy,girl,count):
