@@ -1,4 +1,4 @@
-# os|abspath,dirname
+# os.path|abspath,dirname,join
 
 import os
 
@@ -23,4 +23,14 @@ print(temp)
 # 显示1.16.02.py所在目录的目录的名称
 
 temp=os.path.dirname(os.path.dirname(os.path.abspath('1.16.02.py')))
+print(temp)
+
+# 打印本文件的绝对路径
+
+temp=os.path.abspath(__file__)
+print(temp)
+
+# 合并目录
+
+temp=os.path.join('/','123','456','789')
 print(temp)
