@@ -1,4 +1,4 @@
-# 绑定属性，方法,__slots__
+# 绑定属性和方法,__slots__
 
 from types import MethodType
 
@@ -37,3 +37,14 @@ try:
 except AttributeError as reason:
     print('Because \'__slots__\' is used to restricted atttribute defined | '+str(reason))
 
+
+'''
+使用__slots__要注意，__slots__定义的属性仅对当前类实例起作用，对继承的子类是不起作用的：
+'''
+
+class GraduateStudent(Student):
+    pass
+
+g=GraduateStudent()
+g.score=999
+print(g.score)
