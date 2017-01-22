@@ -1,4 +1,4 @@
-# 魔法方法|相关属性|__getattribute__,__getattr__,__setattr__,__delattr__
+# 魔法方法|__getattribute__,__getattr__,__setattr__,__delattr__
 
 class C:
 	def __getattribute__(self,name):
@@ -9,13 +9,17 @@ class C:
 	def __setattr__(self,name,value):
 		print('setattr')
 		super().__setattr__(name,value)
-	def __delattr_(self,name):
+	def __delattr__(self,name):
 		print('delattr')
 		super().__delattr__(name)
 c=C()
 print(c.x)
 
+print('-------')
+
 c.x=1
 print(c.x)
+
+print('-------')
 
 del c
