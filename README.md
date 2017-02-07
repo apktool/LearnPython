@@ -384,3 +384,9 @@ BaseException
 | `__and__(self, other)` | 定义按位与操作的行为：& |
 | `__xor__(self, other)` | 定义按位异或操作的行为：^ |
 | `__or__(self, other)` | 定义按位或操作的行为：|
+
+# 导入模块
+
+- import 模块名
+- from 模块名 import 函数名
+- import 模块名 as 新名字
