@@ -1,3 +1,4 @@
+# 爬虫|geturl,info,getcode
 
 import urllib.request
 
