@@ -1,4 +1,4 @@
-# socket|client
+# socket|client|tcp
 
 import socket
 
