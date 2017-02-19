@@ -24,7 +24,7 @@ def get_html(url):
 	opener.addheaders=head
 
 	try:
-		req=opener.open(url)
+		req=opener.open(url,timeout=100)
 	except urllib.error.HTTPError as errhttp:
 		print(errhttp.code)
 		print(errhttp.reason)
