@@ -3,6 +3,7 @@
 import urllib.request
 import http.cookiejar
 import time
+import json
 import re
 import os
 import pdb
@@ -43,15 +44,18 @@ def get_xsrf(html):
     xsfr = p.findall(html)
     return xsfr[0]
 
-def get_html(url):
+def get_html(url,postdata=None):
     try:
         opener=get_opener()
-        req=opener.open(url)
+        if postdata == None:
+            req=opener.open(url)
+        else:
+            req=opener.open(url,postdata)
     except urllib.error.HTTPError as errhttp:
-        print(errhttp.code)
-        print(errhttp.reason)
+        print('HTTP error code %s -> %s'%(errhttp.code,errhttp.reason))
     except urllib.error.URLError as errurl:
-        print(errurl.reason)
+        print('URL error reason %s'%(errurl.reason))
+
     return req
 
 # 获取验证码
@@ -59,8 +63,7 @@ def get_captcha():
     t=str(int(time.time()*1000))
     captcha_url = 'http://www.zhihu.com/captcha.gif?r=' + t + "&type=login"
     print(captcha_url)
-    opener=get_opener()
-    req=opener.open(captcha_url)
+    req=get_html(captcha_url)
     captcha_data=req.read()
     
     with open('captcha.gif', 'wb') as f:
@@ -68,6 +71,22 @@ def get_captcha():
             f.close()
     captcha = input('Please input the captcha: ')
     return captcha
+
+def get_profile(url,postdata):
+    profile={}
+
+    req=get_html(url,postdata)
+    html=req.read().decode('utf-8')
+    p=re.compile(r'<span class="name">(.*?)</span>')
+    data=p.findall(html)
+
+    profile['name']=data[0]
+    p=re.compile(r'<input autocomplete="off" class="zg-form-text-input" name="url_token" id="url_token" value="(.*?)" required>')
+    data=p.findall(html)
+    profile['domainname']=data[0]
+
+    return profile
+
 
 if __name__=='__main__':
     req=get_html(url)
@@ -82,28 +101,32 @@ if __name__=='__main__':
 
     postdata=urllib.parse.urlencode(basicdata).encode('utf-8')
     print(postdata)
-    opener=get_opener()
-    req=opener.open(url,postdata)
+    req=get_html(url,postdata)
     print('------------------')
     print(req)
     print('------------------')
 
     
     data=req.read()
-    a=data.decode('utf-8').find('r')
-    b=data.decode('utf-8').find('\n',a)
-    c=data.decode('utf-8').find('msg')
-    d=data.decode('utf-8').find('\"',c+7)
-    rcode=data.decode('utf-8')[b-2:b-1]
-    print(rcode)
-    msg=data.decode('utf-8')[c+7:d]
-    info=msg.encode('utf-8').decode('unicode-escape')
-    print(info)
-    if rcode == '0':
-        print('haha')
+    js=json.loads(data)
+    rcode=js['r']
+    msg=js['msg']
+    print(msg)
+
+    if rcode == 0:
+        profile={}
+        url='https://www.zhihu.com/settings/profile'
+        profile=get_profile(url,postdata)
+
+        for key,value in profile.items():
+            print(key+' : '+value)
     else:
-        if info=='验证码错误':
+        errcode=js['errcode']
+        while errcode==1991829:
             captcha=get_captcha()
             basicdata['captcha']=captcha
             postdata=urllib.parse.urlencode(basicdata).encode('utf-8')
-            req=opener.open(url,postdata)
+            req=get_html(url,postdata)
+            data=req.read()
+            js=json.loads(data)
+            errcode=js['errcode']
