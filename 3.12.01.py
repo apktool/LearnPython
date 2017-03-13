@@ -1,4 +1,4 @@
-# 类的继承
+# 类的继承,将类作为参数传递
 class people(object):
     def __init__(self):
         pass
@@ -15,9 +15,7 @@ class manager(object):
         self._Age = age
 
     def display(self):
-        print('+++++')
-        print(self._People.display())  # 此处有疑问,打印None
-        print('+++++')
+        self._People.display()
         print(self._Name)
         print(self._Sex)
         print(self._Age)
@@ -38,7 +36,7 @@ class student(people):
 
 
 b = people()
-a = manager(b, 'wengang', 'female', 10)
+a = manager(b, 'wen', 'female', 10)
 a.display()
 print('---------------------')
 d = student('xiaoxiao', 'male')
