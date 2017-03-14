@@ -19,6 +19,7 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % self.username
 
+
 '''
 temp.py
 
@@ -32,4 +33,3 @@ li@li-pc$ python3
 >>> db.session.commit()
 >>> users = User.query.all()  # 访问数据库中的数据
 '''
-
