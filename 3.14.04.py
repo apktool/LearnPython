@@ -3,7 +3,7 @@
 def func1(x, z):
     y = 12345
     print(locals())  # 局部命名空间
-    globals()['y']=98765
+    locals()['y']=98765
     print(locals())
 func1(1 , "first")
 
