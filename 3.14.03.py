@@ -23,3 +23,12 @@ UnboundLocalError: local variable 'y' referenced before assignment
 3、当函数被调用时创建一个局部命名空间，当函数返回结果 或抛出异常时，被删除。每一个递归调用的函数都拥有自己的命名空间。
 Python 的一个特别之处在于其赋值操作总是在最里层的作用域。赋值不会复制数据——只是将命名绑定到对象。删除也是如此："del y" 只是从局部作用域的命名空间中删除命名y。事实上，所有引入新命名的操作都作用于局部作用域。
 '''
+
+'''
+A scope is a textual region of a Python program where a namespace is directly accessible. “Directly accessible” here means that an unqualified reference to a name attempts to find the name in the namespace.
+
+the innermost scope, which is searched first, contains the local names
+the scopes of any enclosing functions, which are searched starting with the nearest enclosing scope, contains non-local, but also non-global names
+the next-to-last scope contains the current module’s global names
+the outermost scope (searched last) is the namespace containing built-in names
+'''
