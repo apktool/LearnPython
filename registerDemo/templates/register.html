@@ -1,0 +1,24 @@
+{% from "_formhelpers.html" import render_field %}
+<form method=post>
+	<dl>
+		{#
+		<dt>{{ form.mobile.label }}</dt>
+		<dd>{{ form.mobile() }}</dd>
+
+		<dt>{{ form.password.label }}</dt>
+		<dd>{{ form.password() }}</dd>
+
+		<dt>{{ form.password_repeat.label }}</dt>
+		<dd>{{ form.password_repeat() }}</dd>
+
+		<dt>{{ form.mobile_code.label }}</dt>
+		<dd>{{ form.mobile_code() }}</dd>
+		#}
+
+		{{ render_field(form.mobile) }}
+		{{ render_field(form.password) }}
+		{{ render_field(form.password_repeat) }}
+		{{ render_field(form.mobile_code) }}
+	</dl>
+	<p><input type=submit value=Register>
+</form>
