@@ -13,6 +13,7 @@ def register():
     '''
     request.args, request.args, request.values
     1. 从URL 获取表单信息
+    2. 从HTML FORM 获取表单信息（需在类RegisterFormContent中添加submit属性）
     '''
 
     getParms = request.values

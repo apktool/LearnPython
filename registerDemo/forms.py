@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, PasswordField, validators
+from wtforms import Form, StringField, PasswordField, SubmitField, validators
 
 
 class RegisterFormContent(Form):
@@ -6,3 +6,4 @@ class RegisterFormContent(Form):
     password = PasswordField('New Password', [validators.DataRequired(), validators.EqualTo('confirm', message='Passwords must match')])
     password_repeat = PasswordField('Repeat Password')
     mobile_code = StringField('I accept the TOS', [validators.DataRequired()])
+    submit = SubmitField('Submit')
