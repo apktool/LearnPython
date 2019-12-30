@@ -19,7 +19,7 @@ s.headers = headers
 """
 
 def create_session():
-    url = "http://{}:{}/sessions".format(hosts, port) 
+    url = "http://{}:{}/sessions".format(hosts, port)
     data = dict()
     data["kind"] = "spark"
     r = s.post(url, data = json.dumps(data))
@@ -27,7 +27,7 @@ def create_session():
 
 
 def get_all_session():
-    url = "http://{}:{}/sessions".format(hosts, port) 
+    url = "http://{}:{}/sessions".format(hosts, port)
     sessions_json = s.get(url).json()
     sessions_total = sessions_json["total"]
     sessions = list()
@@ -41,14 +41,15 @@ def get_all_session():
 
 
 def delete_session(session):
-    url = "http://{}:{}/sessions/{}".format(hosts, port, session) 
+    url = "http://{}:{}/sessions/{}".format(hosts, port, session)
     r = s.delete(url)
     return r.json()
 
 
 def execute_statement(session):
-    url = "http://{}:{}/sessions/{}/statements".format(hosts, port, session) 
-    
+    url = "http://{}:{}/sessions/{}/statements".format(hosts, port, session)
+
+    '''
     data = {
         'code': textwrap.dedent("""
             spark.catalog.dropTempView("tmp_date")
@@ -60,6 +61,29 @@ def execute_statement(session):
             %table result
         """)
     }
+    '''
+
+    data = {
+        'code': textwrap.dedent("""
+            import scala.collection.mutable
+            spark.catalog.dropTempView("tmp_date")
+            val df = Seq(("06-03-2009"),("07-24-2009")).toDF("date")
+            val tmp = df.select(col("date"),to_date(col("date"),"MM-dd-yyyy").as("to_date"))
+            val tempView = tmp.createTempView("tmp_date")
+            val d = spark.sql("SELECT date,to_date FROM tmp_date")
+            val result = d.collect().map(t => {
+                val map: mutable.Map[String, Any] = mutable.HashMap()
+                val schema = t.schema
+
+                for (i <- 0 until schema.size) {
+                    map += (schema.names(i) -> t.get(i))
+                }
+                map
+           })
+           %table result
+        """)
+    }
+
     # data = {
     #     'code': textwrap.dedent("""
     #         val x = List(List(1, "a", "2019-04-02"), List(3, "b", "2019-05-01"))
@@ -71,7 +95,7 @@ def execute_statement(session):
 
 
 def get_statement_result(session, statement):
-    url = "http://{}:{}/sessions/{}/statements/{}".format(hosts, port, session, statement) 
+    url = "http://{}:{}/sessions/{}/statements/{}".format(hosts, port, session, statement)
     r = s.get(url)
     return r.json()
 
@@ -95,7 +119,7 @@ if __name__ == '__main__':
         time.sleep(1)
         statement_result = get_statement_result(sessions_id[0], statement_json["id"])
         status = statement_result["state"]
-        
+
         print("-> session[{}] statement[{}] state[{}]".format(sessions_id[0], statement_json["id"], status))
         if(status == "available"):
             break
